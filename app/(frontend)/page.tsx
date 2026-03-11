@@ -7,7 +7,6 @@ import { ArrowRight, TrendingUp } from "lucide-react";
 
 import { BreakingNewsTicker } from "@/components/frontend/BreakingNewsTicker";
 import { NewsCard } from "@/components/frontend/NewsCard";
-import { Footer } from "@/components/frontend/Footer";
 
 const newsItems = [
   {
@@ -183,8 +182,6 @@ export default function Home() {
           </aside>
         </div>
       </main>
-
-      <Footer />
     </>
   );
 }
