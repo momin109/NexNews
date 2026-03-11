@@ -1,11 +1,12 @@
-import React from "react";
+import Header from "@/components/frontend/Header";
+import { Footer } from "@/components/frontend/Footer";
 
-const layout = () => {
+export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div>
-      <h1>hh</h1>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
+      <div className="flex-1">{children}</div>
+      <Footer />
     </div>
   );
-};
-
-export default layout;
+}

@@ -4,14 +4,19 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "seed:admin": "tsx scripts/super-admin.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.3.1",
+    "jsonwebtoken": "^9.0.3",
     "lucide-react": "^0.577.0",
+    "mongoose": "^9.2.4",
     "next": "16.1.6",
     "radix-ui": "^1.4.3",
     "react": "19.2.3",
@@ -22,12 +27,14 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
