@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, Menu, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,13 +18,26 @@ type HeaderClientProps = {
 };
 
 export default function HeaderClient({ categories }: HeaderClientProps) {
+  const router = useRouter();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const trimmed = search.trim();
+    if (!trimmed) return;
+
+    router.push(`/search?q=${encodeURIComponent(trimmed)}`);
+    setIsMenuOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background">
       <div className="bg-primary px-4 py-2 text-[10px] font-medium text-primary-foreground md:text-xs">
         <div className="container mx-auto flex items-center justify-between">
           <span>March 06, 2026 • Friday</span>
+
           <div className="flex gap-3 md:gap-4">
             <Link href="/about" className="hidden hover:underline sm:inline">
               About
@@ -59,13 +73,21 @@ export default function HeaderClient({ categories }: HeaderClientProps) {
           </Button>
         </div>
 
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search news..."
-            className="h-9 rounded-full border-none bg-muted/50 pl-10 focus-visible:ring-primary md:h-10"
-          />
-        </div>
+        <form onSubmit={handleSearch} className="flex w-full max-w-md gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search news..."
+              className="h-9 rounded-full border-none bg-muted/50 pl-10 focus-visible:ring-primary md:h-10"
+            />
+          </div>
+
+          <Button type="submit" className="rounded-full px-5">
+            Search
+          </Button>
+        </form>
       </div>
 
       <nav
