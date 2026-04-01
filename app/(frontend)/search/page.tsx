@@ -13,12 +13,50 @@ type SearchParams = Promise<{
   page?: string;
 }>;
 
+type SearchResult = {
+  _id: string;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  featuredImage?: string;
+  publishedAt?: string | null;
+  createdAt?: string;
+  category?: {
+    _id?: string;
+    name: string;
+    slug: string;
+  } | null;
+};
+
 const LIMIT = 10;
 
 export const metadata: Metadata = {
   title: "Search News | News Portal",
   description: "Search published news articles by keyword.",
 };
+
+function serializeNews(item: any): SearchResult {
+  return {
+    _id: item._id?.toString() || "",
+    title: item.title || "",
+    slug: item.slug || "",
+    excerpt: item.excerpt || "",
+    featuredImage: item.featuredImage || "",
+    publishedAt: item.publishedAt
+      ? new Date(item.publishedAt).toISOString()
+      : null,
+    createdAt: item.createdAt
+      ? new Date(item.createdAt).toISOString()
+      : undefined,
+    category: item.category
+      ? {
+          _id: item.category._id?.toString(),
+          name: item.category.name || "",
+          slug: item.category.slug || "",
+        }
+      : null,
+  };
+}
 
 export default async function SearchPage({
   searchParams,
@@ -31,21 +69,7 @@ export default async function SearchPage({
 
   await connectDB();
 
-  let results: Array<{
-    _id: string;
-    title: string;
-    slug: string;
-    excerpt?: string;
-    featuredImage?: string;
-    publishedAt?: string | null;
-    createdAt?: string;
-    category?: {
-      _id?: string;
-      name: string;
-      slug: string;
-    } | null;
-  }> = [];
-
+  let results: SearchResult[] = [];
   let total = 0;
 
   if (query) {
@@ -72,26 +96,7 @@ export default async function SearchPage({
       .limit(LIMIT)
       .lean();
 
-    results = docs.map((item: any) => ({
-      _id: item._id.toString(),
-      title: item.title,
-      slug: item.slug,
-      excerpt: item.excerpt,
-      featuredImage: item.featuredImage,
-      publishedAt: item.publishedAt
-        ? new Date(item.publishedAt).toISOString()
-        : null,
-      createdAt: item.createdAt
-        ? new Date(item.createdAt).toISOString()
-        : undefined,
-      category: item.category
-        ? {
-            _id: item.category._id ? item.category._id.toString() : undefined,
-            name: item.category.name,
-            slug: item.category.slug,
-          }
-        : null,
-    }));
+    results = docs.map(serializeNews);
 
     const buildUrl = (page: number) => {
       const qp = new URLSearchParams();
@@ -144,10 +149,7 @@ export default async function SearchPage({
               <>
                 <div className="space-y-8">
                   {results.map((item) => (
-                    <div
-                      key={String(item._id)}
-                      className="border-b pb-8 last:border-0"
-                    >
+                    <div key={item._id} className="border-b pb-8 last:border-0">
                       <Link href={`/news/${item.slug}`}>
                         <div className="cursor-pointer">
                           <NewsCard

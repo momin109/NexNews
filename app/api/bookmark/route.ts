@@ -6,7 +6,7 @@ export async function POST(req: Request) {
   await connectDB();
 
   const { postId } = await req.json();
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const sessionId = cookieStore.get("sessionId")?.value;
 
   if (!sessionId) {
