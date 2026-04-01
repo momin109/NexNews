@@ -62,7 +62,7 @@ export default async function SearchPage({
     const totalPages = Math.max(1, Math.ceil(total / LIMIT));
     const safePage = Math.min(currentPage, totalPages);
 
-    results = await News.find(dbQuery)
+    const docs = await News.find(dbQuery)
       .select(
         "_id title slug excerpt featuredImage publishedAt createdAt category",
       )
@@ -71,6 +71,27 @@ export default async function SearchPage({
       .skip((safePage - 1) * LIMIT)
       .limit(LIMIT)
       .lean();
+
+    results = docs.map((item: any) => ({
+      _id: item._id.toString(),
+      title: item.title,
+      slug: item.slug,
+      excerpt: item.excerpt,
+      featuredImage: item.featuredImage,
+      publishedAt: item.publishedAt
+        ? new Date(item.publishedAt).toISOString()
+        : null,
+      createdAt: item.createdAt
+        ? new Date(item.createdAt).toISOString()
+        : undefined,
+      category: item.category
+        ? {
+            _id: item.category._id ? item.category._id.toString() : undefined,
+            name: item.category.name,
+            slug: item.category.slug,
+          }
+        : null,
+    }));
 
     const buildUrl = (page: number) => {
       const qp = new URLSearchParams();
