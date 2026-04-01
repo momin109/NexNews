@@ -3,29 +3,33 @@ import mongoose from "mongoose";
 const MONGODB_URI = process.env.MONGODB_URI!;
 
 if (!MONGODB_URI) {
-  throw new Error("Please define MONGODB_URI in .env.local");
+  throw new Error("Please define the MONGODB_URI environment variable");
 }
 
-let cached = (
-  global as typeof globalThis & {
-    mongoose?: {
-      conn: typeof mongoose | null;
-      promise: Promise<typeof mongoose> | null;
-    };
-  }
-).mongoose;
+type MongooseCache = {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
+
+declare global {
+  var mongooseCache: MongooseCache | undefined;
+}
+
+let cached = global.mongooseCache;
 
 if (!cached) {
-  cached = global.mongoose = { conn: null, promise: null };
+  cached = global.mongooseCache = { conn: null, promise: null };
 }
 
 export async function connectDB() {
-  if (cached?.conn) return cached.conn;
+  if (cached?.conn) {
+    return cached.conn;
+  }
 
   if (!cached?.promise) {
-    cached!.promise = mongoose.connect(MONGODB_URI, {
-      dbName: "news_portal",
-    });
+    cached!.promise = mongoose
+      .connect(MONGODB_URI)
+      .then((mongoose) => mongoose);
   }
 
   cached!.conn = await cached!.promise;
