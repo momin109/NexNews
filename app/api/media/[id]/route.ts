@@ -45,7 +45,6 @@ export async function DELETE(
     }
 
     const cloudinary = getCloudinary();
-
     await cloudinary.uploader.destroy(media.publicId);
 
     await Media.findByIdAndDelete(id);
