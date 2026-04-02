@@ -73,15 +73,13 @@ export default function MediaPage() {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const uploadFile = async (file: File) => {
     try {
       setUploading(true);
 
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("altText", file.name);
 
       const res = await fetch("/api/media/upload", {
         method: "POST",
@@ -106,6 +104,12 @@ export default function MediaPage() {
         fileInputRef.current.value = "";
       }
     }
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await uploadFile(file);
   };
 
   const handleCopyUrl = async (url: string) => {
@@ -232,9 +236,7 @@ export default function MediaPage() {
         <div className="mb-4 rounded-full bg-background p-4 shadow-sm transition-transform group-hover:scale-110">
           <UploadCloud className="h-8 w-8 text-primary" />
         </div>
-        <h3 className="mb-1 text-lg font-semibold">
-          Click to upload or drag and drop
-        </h3>
+        <h3 className="mb-1 text-lg font-semibold">Click to upload</h3>
         <p className="max-w-md text-sm text-muted-foreground">
           PNG, JPG, or WEBP only. Maximum file size 5MB.
         </p>

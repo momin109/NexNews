@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/auth-user";
 import Media from "@/models/Media";
-import cloudinary from "@/lib/cloudinary";
+import getCloudinary from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
@@ -54,6 +54,8 @@ export async function POST(req: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
+    const cloudinary = getCloudinary();
+
     const uploadResult = await new Promise<any>((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
         {
@@ -77,6 +79,7 @@ export async function POST(req: NextRequest) {
       fileName: uploadResult.public_id,
       originalName: file.name,
       url: uploadResult.secure_url,
+      publicId: uploadResult.public_id,
       mimeType: file.type,
       size: file.size,
       altText,

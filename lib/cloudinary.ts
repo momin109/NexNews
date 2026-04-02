@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 
-function getCloudinary() {
+export default function getCloudinary() {
   const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
@@ -17,5 +17,3 @@ function getCloudinary() {
 
   return cloudinary;
 }
-
-export default getCloudinary;
