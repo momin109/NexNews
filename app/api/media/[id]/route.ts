@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { connectDB } from "@/lib/db";
 import { getAuthUserFromRequest } from "@/lib/auth-user";
 import Media from "@/models/Media";
-import cloudinary from "@/lib/cloudinary";
+import getCloudinary from "@/lib/cloudinary";
 
 export const runtime = "nodejs";
 
@@ -43,6 +43,8 @@ export async function DELETE(
         { status: 404 },
       );
     }
+
+    const cloudinary = getCloudinary();
 
     await cloudinary.uploader.destroy(media.publicId);
 
