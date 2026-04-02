@@ -7,3 +7,5 @@ export function slugify(text: string) {
     .replace(/\s+/g, "-")
     .replace(/-+/g, "-");
 }
+
+/// sundor hoice . just commit kora zonno this line lekha
