@@ -1,6 +1,6 @@
 // import { connectDB } from "@/lib/db";
 // import Category from "@/models/Category";
-import HeaderClient from "@/components/frontend/HeaderClient";
+// import HeaderClient from "@/components/frontend/HeaderClient";
 
 // export default async function Header() {
 //   await connectDB();
@@ -21,6 +21,8 @@ import HeaderClient from "@/components/frontend/HeaderClient";
 // }
 
 // import HeaderClient from "@/components/frontend/HeaderClient";
+
+import HeaderClient from "@/components/frontend/HeaderClient";
 
 export default function Header() {
   return <HeaderClient />;
