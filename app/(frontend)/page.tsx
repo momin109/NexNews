@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { formatDistanceToNow } from "date-fns";
 import { NewsCard } from "@/components/frontend/NewsCard";
