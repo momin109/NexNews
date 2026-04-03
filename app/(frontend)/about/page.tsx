@@ -1,6 +1,6 @@
 // import { Header, Footer } from "@/components/FrontendLayout";
 
-import { Newspaper, Award, Users, ShieldCheck } from "lucide-react";
+import { Award, ShieldCheck } from "lucide-react";
 
 export default function About() {
   return (

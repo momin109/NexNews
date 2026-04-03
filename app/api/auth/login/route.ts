@@ -21,14 +21,16 @@ export async function POST(req: NextRequest) {
 
     const user = await User.findOne({
       email: email.toLowerCase().trim(),
-    }).lean<{
-      _id: string;
-      name: string;
-      email: string;
-      password: string;
-      role: "super_admin" | "admin" | "editor" | "reporter";
-      isActive: boolean;
-    } | null>();
+    })
+      .select("+password")
+      .lean<{
+        _id: string;
+        name: string;
+        email: string;
+        password: string;
+        role: "super_admin" | "admin" | "editor" | "reporter";
+        isActive: boolean;
+      } | null>();
 
     if (!user) {
       return NextResponse.json(
@@ -44,6 +46,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    if (!user.password) {
+      return NextResponse.json(
+        { success: false, message: "Password not found for user" },
+        { status: 500 },
+      );
+    }
+
     const isPasswordMatch = await bcrypt.compare(password, user.password);
 
     if (!isPasswordMatch) {
@@ -53,6 +62,13 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    console.log("DB user email:", user?.email);
+    console.log("Stored hash:", user?.password);
+    console.log("Entered password:", password);
+
+    // const isPasswordMatch = await bcrypt.compare(password, user.password);
+    console.log("Password match:", isPasswordMatch);
+
     const token = signToken({
       userId: String(user._id),
     });
@@ -61,7 +77,7 @@ export async function POST(req: NextRequest) {
       success: true,
       message: "Login successful",
       user: {
-        id: user._id,
+        id: String(user._id),
         name: user.name,
         email: user.email,
         role: user.role,
