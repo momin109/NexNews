@@ -55,9 +55,6 @@ export default function HeaderClient() {
           <span>March 06, 2026 • Friday</span>
 
           <div className="flex gap-3 md:gap-4">
-            <Link href="/about" className="hidden hover:underline sm:inline">
-              About
-            </Link>
             <Link href="/contact" className="hidden hover:underline sm:inline">
               Contact
             </Link>
