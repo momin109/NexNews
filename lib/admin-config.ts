@@ -24,8 +24,7 @@ export type AdminPermission =
   | "homepage"
   | "seo"
   | "comments"
-  | "settings"
-  | "analytics";
+  | "settings";
 
 export const rolePermissions: Record<UserRole, AdminPermission[]> = {
   super_admin: [
@@ -39,7 +38,6 @@ export const rolePermissions: Record<UserRole, AdminPermission[]> = {
     "seo",
     "comments",
     "settings",
-    "analytics",
   ],
   admin: [
     "dashboard",
@@ -124,12 +122,12 @@ export const adminSidebarMenu = [
     href: "/admin/settings",
     permission: "settings" as AdminPermission,
   },
-  {
-    icon: BarChart3,
-    label: "Analytics",
-    href: "/admin/analytics",
-    permission: "analytics" as AdminPermission,
-  },
+  // {
+  //   icon: BarChart3,
+  //   label: "Analytics",
+  //   href: "/admin/analytics",
+  //   permission: "analytics" as AdminPermission,
+  // },
 ];
 
 export function hasPermission(role: UserRole, permission: AdminPermission) {
