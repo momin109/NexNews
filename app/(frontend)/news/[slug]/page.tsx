@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Clock, User, Share2, Facebook, Twitter, Bookmark } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NewsCard } from "@/components/frontend/NewsCard";
+import CommentSection from "@/components/frontend/CommentSection";
 import { connectDB } from "@/lib/db";
 import News from "@/models/News";
 import "@/models/User";
@@ -160,6 +161,7 @@ export default async function NewsDetailsPage({ params }: PageProps) {
             <div className="whitespace-pre-line">{news.content}</div>
           </div>
 
+          <CommentSection newsId={String(news._id)} />
           <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-y py-8">
             <div className="flex items-center gap-2">
               <span className="mr-2 text-xs font-black uppercase tracking-widest">
